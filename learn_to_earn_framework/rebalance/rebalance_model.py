@@ -193,7 +193,7 @@ def maximize_rewards_heuristic(E, D, edges, reward_vector, t, T, hex_bins):
     return (flow_vector, excess_vector, get_tot_outgoing_flow(excess_bins, edges, flow_vector))
 
 
-def maximize_rewards(self, E, D, edges, reward_vector, t, T, hex_bins):
+def maximize_rewards(E, D, edges, reward_vector, t, T, hex_bins):
     """
     Maximizes rewards by rebalancing
     :param E:
@@ -216,14 +216,14 @@ def maximize_rewards(self, E, D, edges, reward_vector, t, T, hex_bins):
     cons = ({'type': 'ineq',  # Flow >= 0
              'fun': lambda flow_vector: flow_vector},
             {'type': 'ineq',  # Flow outgoing from each node <= excess in that node
-             'fun': lambda flow_vector: excess_vector - self.get_tot_outgoing_flow(
+             'fun': lambda flow_vector: excess_vector - get_tot_outgoing_flow(
                  excess_bins, edges, flow_vector)},
             {'type': 'ineq',  # Flow incoming to each node <= deficit in that node
-             'fun': lambda flow_vector: deficit_vector - self.get_tot_incoming_flow(
+             'fun': lambda flow_vector: deficit_vector - get_tot_incoming_flow(
                  deficit_bins, deficit_times, edges, flow_vector)}
             )
 
-    sol = minimize(fun=self.calc_costs,
+    sol = minimize(fun=calc_costs,
                    x0=flow_vector,
                    args=(cost_vector),
                    constraints=cons,
@@ -288,7 +288,7 @@ def maximize_flows_heuristic(E, D, edges, reward_vector, t, T, hex_bins):
     return (flow_vector, excess_vector, get_tot_outgoing_flow(excess_bins, edges, flow_vector))
 
 
-def maximize_flows(self, E, D, edges, reward_vector, t, T, hex_bins):
+def maximize_flows(E, D, edges, reward_vector, t, T, hex_bins):
     """
     Maximizes flow by rebalancing
     :param E:
@@ -313,14 +313,14 @@ def maximize_flows(self, E, D, edges, reward_vector, t, T, hex_bins):
     cons = ({'type': 'ineq',  # Flow >= 0
              'fun': lambda flow_vector: flow_vector},
             {'type': 'ineq',  # Flow outgoing from each node <= excess in that node
-             'fun': lambda flow_vector: excess_vector - self.get_tot_outgoing_flow(
+             'fun': lambda flow_vector: excess_vector -get_tot_outgoing_flow(
                  excess_bins, edges, flow_vector)},
             {'type': 'ineq',  # Flow incoming to each node <= deficit in that node
-             'fun': lambda flow_vector: deficit_vector - self.get_tot_incoming_flow(
+             'fun': lambda flow_vector: deficit_vector - get_tot_incoming_flow(
                  deficit_bins, deficit_times, edges, flow_vector)}
             )
 
-    sol = minimize(fun=self.calc_flows,
+    sol = minimize(fun=calc_flows,
                    x0=flow_vector,
                    args=(cost_vector),
                    constraints=cons,
